@@ -63,6 +63,11 @@ position:absolute;
 position:relative;
 margin-top:15px;
 }
+
+#doodle{
+display:none;
+margin-top:15px;
+}
 </style>
 </head>
 
@@ -72,9 +77,7 @@ margin-top:15px;
 
 <h2>Prabhakar ❤️ Bhawna</h2>
 
-<p>
-Miles apart… but you still make my heart skip a beat 😌❤️
-</p>
+<p>Miles apart… but you still make my heart skip a beat 😌❤️</p>
 
 <div id="typing">Bhawna is typing...</div>
 
@@ -84,6 +87,23 @@ Miles apart… but you still make my heart skip a beat 😌❤️
 </div>
 
 <p id="reply"></p>
+
+<div id="doodle">
+
+<!-- simple couple doodle -->
+<svg width="120" height="120" viewBox="0 0 120 120">
+<circle cx="35" cy="30" r="12" fill="#ff9aa2"/>
+<rect x="25" y="42" width="20" height="35" rx="8" fill="#ff9aa2"/>
+
+<circle cx="85" cy="30" r="12" fill="#ffd1dc"/>
+<rect x="75" y="42" width="20" height="35" rx="8" fill="#ffd1dc"/>
+
+<line x1="45" y1="60" x2="75" y2="60" stroke="#ff3366" stroke-width="3"/>
+</svg>
+
+<p style="font-size:14px;">us… always ❤️</p>
+
+</div>
 
 </div>
 
@@ -99,7 +119,6 @@ document.getElementById("typing").innerHTML=
 "Prabhakar… will you be my Valentine? 🥺💌";
 },5000);
 
-// romantic responses
 var compliments=[
 "You still give me butterflies 😌🦋",
 "You're my favorite person ❤️",
@@ -109,20 +128,18 @@ var compliments=[
 
 function yes(){
 
-// play song
 document.getElementById("bgMusic").play();
 
-// vibration
 if(navigator.vibrate){
 navigator.vibrate([200,100,200,100,300]);
 }
 
-// show reply
 document.getElementById("reply").innerHTML=
 compliments[Math.floor(Math.random()*compliments.length)];
+
+document.getElementById("doodle").style.display="block";
 }
 
-// escape no button
 function moveNo(){
 var btn=document.getElementById("noBtn");
 btn.style.left=Math.random()*120+"px";
