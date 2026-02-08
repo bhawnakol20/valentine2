@@ -67,6 +67,12 @@ margin-top:15px;
 #doodle{
 display:none;
 margin-top:15px;
+animation:fade 1.5s ease;
+}
+
+@keyframes fade{
+from{opacity:0;transform:translateY(10px);}
+to{opacity:1;transform:translateY(0);}
 }
 </style>
 </head>
@@ -90,7 +96,6 @@ margin-top:15px;
 
 <div id="doodle">
 
-<!-- simple couple doodle -->
 <svg width="120" height="120" viewBox="0 0 120 120">
 <circle cx="35" cy="30" r="12" fill="#ff9aa2"/>
 <rect x="25" y="42" width="20" height="35" rx="8" fill="#ff9aa2"/>
@@ -119,13 +124,6 @@ document.getElementById("typing").innerHTML=
 "Prabhakar… will you be my Valentine? 🥺💌";
 },5000);
 
-var compliments=[
-"You still give me butterflies 😌🦋",
-"You're my favorite person ❤️",
-"My heart chose you 😏",
-"Forever sounds good with you 💫"
-];
-
 function yes(){
 
 document.getElementById("bgMusic").play();
@@ -134,10 +132,14 @@ if(navigator.vibrate){
 navigator.vibrate([200,100,200,100,300]);
 }
 
+// next romantic dialogue
 document.getElementById("reply").innerHTML=
-compliments[Math.floor(Math.random()*compliments.length)];
+"So it's official now… you & me… same team… same heart ❤️";
 
+// show doodle after 2.5 sec
+setTimeout(()=>{
 document.getElementById("doodle").style.display="block";
+},2500);
 }
 
 function moveNo(){
@@ -146,18 +148,6 @@ btn.style.left=Math.random()*120+"px";
 btn.style.top=Math.random()*120+"px";
 }
 
-  // butterflies
-function startButterflies(){
-setInterval(function(){
-var b=document.createElement("div");
-b.className="butterfly";
-b.innerHTML="❤️";
-b.style.left=Math.random()*100+"vw";
-b.style.animationDuration=(3+Math.random()*3)+"s";
-document.body.appendChild(b);
-setTimeout(()=>b.remove(),6000);
-},300);
-}
 </script>
 
 </body>
