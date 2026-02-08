@@ -7,7 +7,6 @@
 <style>
 body{
 margin:0;
-padding:0;
 font-family:system-ui,Arial;
 background:linear-gradient(135deg,#ff9aa2,#ffd1dc);
 display:flex;
@@ -19,21 +18,27 @@ text-align:center;
 
 .container{
 background:white;
-padding:25px;
+padding:22px;
 border-radius:18px;
-width:90%;
+width:92%;
 max-width:360px;
 box-shadow:0 10px 25px rgba(0,0,0,0.15);
 }
 
 #typing{
-min-height:60px;
+min-height:70px;
 font-size:20px;
 font-weight:bold;
+transition:0.4s;
+}
+
+.buttons{
+position:relative;
+margin-top:15px;
 }
 
 button{
-padding:14px 18px;
+padding:14px;
 font-size:16px;
 border:none;
 border-radius:10px;
@@ -45,12 +50,13 @@ width:120px;
 .yes{
 background:#ff3366;
 color:white;
-animation:pulse 1.6s infinite;
+animation:pulse 1.5s infinite;
 }
 
 .no{
 background:#ddd;
 position:absolute;
+transition:0.3s;
 }
 
 @keyframes pulse{
@@ -59,14 +65,27 @@ position:absolute;
 100%{transform:scale(1);}
 }
 
-.buttons{
-position:relative;
-margin-top:15px;
+.glow{
+animation:heartbeat 1s infinite;
 }
 
-#doodle{
-display:none;
-margin-top:15px;
+@keyframes heartbeat{
+0%{transform:scale(1);}
+25%{transform:scale(1.1);}
+50%{transform:scale(1);}
+75%{transform:scale(1.1);}
+100%{transform:scale(1);}
+}
+
+.butterfly{
+position:fixed;
+top:-10px;
+font-size:20px;
+animation:fall linear forwards;
+}
+
+@keyframes fall{
+to{transform:translateY(110vh);}
 }
 </style>
 </head>
@@ -79,46 +98,43 @@ margin-top:15px;
 
 <p>Miles apart… but you still make my heart skip a beat 😌❤️</p>
 
-<div id="typing">Bhawna is typing...</div>
+<div id="typing">Message delivered… 💌</div>
 
 <div class="buttons">
-<button class="yes" onclick="yes()">YES 😍</button>
+<button class="yes" id="yesBtn" onclick="yes()">YES 😍</button>
 <button class="no" id="noBtn" onclick="moveNo()">NO 🙈</button>
 </div>
 
 <p id="reply"></p>
 
-<div id="doodle">
-
-<!-- simple couple doodle -->
-<svg width="120" height="120" viewBox="0 0 120 120">
-<circle cx="35" cy="30" r="12" fill="#ff9aa2"/>
-<rect x="25" y="42" width="20" height="35" rx="8" fill="#ff9aa2"/>
-
-<circle cx="85" cy="30" r="12" fill="#ffd1dc"/>
-<rect x="75" y="42" width="20" height="35" rx="8" fill="#ffd1dc"/>
-
-<line x1="45" y1="60" x2="75" y2="60" stroke="#ff3366" stroke-width="3"/>
-</svg>
-
-<p style="font-size:14px;">us… always ❤️</p>
-
 </div>
 
-</div>
-
-<audio id="bgMusic">
+<audio id="music">
 <source src="hawayein.mp3" type="audio/mpeg">
 </audio>
 
 <script>
 
-// typing intro
+// WhatsApp style intro
 setTimeout(()=>{
+document.getElementById("typing").innerHTML="Bhawna is typing...";
+},2000);
+
+setTimeout(()=>{
+let count=3;
+let counter=setInterval(()=>{
+document.getElementById("typing").innerHTML=
+"Typing message... "+count+" ❤️";
+count--;
+if(count<0){
+clearInterval(counter);
 document.getElementById("typing").innerHTML=
 "Prabhakar… will you be my Valentine? 🥺💌";
+}
+},1000);
 },5000);
 
+// compliments
 var compliments=[
 "You still give me butterflies 😌🦋",
 "You're my favorite person ❤️",
@@ -126,24 +142,45 @@ var compliments=[
 "Forever sounds good with you 💫"
 ];
 
+// yes action
 function yes(){
 
-document.getElementById("bgMusic").play();
+// play song (mobile safe)
+document.getElementById("music").play();
 
+// vibration
 if(navigator.vibrate){
-navigator.vibrate([200,100,200,100,300]);
+navigator.vibrate([200,100,200]);
 }
+
+// heartbeat glow
+document.getElementById("yesBtn").classList.add("glow");
 
 document.getElementById("reply").innerHTML=
 compliments[Math.floor(Math.random()*compliments.length)];
 
-document.getElementById("doodle").style.display="block";
+startButterflies();
 }
 
+// no button escape + shrink
 function moveNo(){
 var btn=document.getElementById("noBtn");
-btn.style.left=Math.random()*120+"px";
+btn.style.left=Math.random()*150+"px";
 btn.style.top=Math.random()*120+"px";
+btn.style.transform="scale(0.7)";
+}
+
+// butterflies
+function startButterflies(){
+setInterval(function(){
+var b=document.createElement("div");
+b.className="butterfly";
+b.innerHTML="❤️";
+b.style.left=Math.random()*100+"vw";
+b.style.animationDuration=(3+Math.random()*3)+"s";
+document.body.appendChild(b);
+setTimeout(()=>b.remove(),6000);
+},300);
 }
 
 </script>
