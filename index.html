@@ -135,60 +135,86 @@ button{
 
 <!-- SECOND SCREEN -->
 <div id="secondScreen">
-
   <img src="Love me.gif">
-
   <h2>Come meet me soon baby 😘❤️</h2>
   <p>Now it's official… you & me… always ❤️</p>
-
 </div>
 
 </div>
 
+<!-- Background Music -->
 <audio id="bgMusic" preload="auto">
   <source src="hawayein.mp3.mp3" type="audio/mpeg">
 </audio>
 
+<!-- Small popup sound (optional). Put a tiny mp3 in your repo and name it pop.mp3 -->
+<audio id="popSound" preload="auto">
+  <source src="pop.wav" type="audio/mpeg">
+</audio>
+
 <script>
-// 1) typing -> then show Open Message button
-setTimeout(()=>{
+/* ---------------------------
+   1) Typing dots animation
+--------------------------- */
+const typingEl = document.getElementById("typing");
+let dotCount = 0;
+
+const typingInterval = setInterval(() => {
+  dotCount = (dotCount + 1) % 4; // 0..3
+  const dots = ".".repeat(dotCount);
+  typingEl.innerHTML = `Bhawna is typing${dots}`;
+}, 450);
+
+/* ---------------------------
+   2) Show "Open Message" after 4s
+--------------------------- */
+setTimeout(() => {
   document.getElementById("openBtn").style.display = "inline-block";
-}, 4000);
 
-// 2) on clicking Open Message: play song + show question + show yes/no, hide open button
-function openMessage(){
-  const music = document.getElementById("bgMusic");
-
-  music.play().catch(err => {
-    console.log("Audio play blocked:", err);
+  // Optional popup sound (may be blocked until user interacts)
+  const pop = document.getElementById("popSound");
+  pop.play().catch(() => {
+    // ignore if blocked
   });
 
-  document.getElementById("typing").innerHTML =
-    "Prabhakar… will you be my Valentine? 🥺💌";
+}, 4000);
 
-  // hide open button
+/* ---------------------------
+   3) Open message action:
+      - Start song
+      - Show question + yes/no
+      - Hide open button
+      - Stop typing animation
+--------------------------- */
+function openMessage(){
+  clearInterval(typingInterval);
+
+  const music = document.getElementById("bgMusic");
+  music.play().catch(err => console.log("Audio play blocked:", err));
+
+  typingEl.innerHTML = "Prabhakar… will you be my Valentine? 🥺💌";
+
   document.getElementById("openBtn").style.display = "none";
-
-  // show yes/no block
   document.getElementById("valentineBlock").style.display = "block";
 }
 
-// 3) YES -> second screen + butterflies (song already playing)
+/* ---------------------------
+   4) YES -> second screen + butterflies
+--------------------------- */
 function yes(){
   if(navigator.vibrate){
     navigator.vibrate([200,100,200,100,300]);
   }
 
-  // hide first screen
   document.getElementById("firstScreen").style.display="none";
-
-  // show second screen
   document.getElementById("secondScreen").style.display="block";
 
   startButterflies();
 }
 
-// NO button moves
+/* ---------------------------
+   NO button moves
+--------------------------- */
 function moveNo(){
   var btn=document.getElementById("noBtn");
   btn.style.left=Math.random()*120+"px";
