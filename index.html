@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Prabhakar ❤️ Bhawna</title>
+<title>Hi Baby❤️</title>
 
 <style>
 body{
@@ -105,7 +105,7 @@ margin-top:15px;
 <line x1="45" y1="60" x2="75" y2="60" stroke="#ff3366" stroke-width="3"/>
 </svg>
 
-<p>us… always ❤️</p>
+<p>❤️</p>
 
 </div>
 
@@ -132,7 +132,7 @@ navigator.vibrate([200,100,200,100,300]);
 }
 
 document.getElementById("reply").innerHTML=
-"So it's official now… you & me… same heart ❤️";
+"Come meet me soon baby ❤️";
 
 document.getElementById("startImg").style.display="none";
 document.getElementById("secondImg").style.display="block";
@@ -148,7 +148,21 @@ btn.style.left=Math.random()*120+"px";
 btn.style.top=Math.random()*120+"px";
 }
 
+// butterflies
+function startButterflies(){
+setInterval(function(){
+var b=document.createElement("div");
+b.className="butterfly";
+b.innerHTML="🦋";
+b.style.left=Math.random()*100+"vw";
+b.style.animationDuration=(3+Math.random()*3)+"s";
+document.body.appendChild(b);
+setTimeout(()=>b.remove(),6000);
+},300);
+}
+
 </script>
 
 </body>
 </html>
+
