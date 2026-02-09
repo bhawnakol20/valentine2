@@ -35,16 +35,47 @@ img{
   margin-bottom:12px;
 }
 
+/* ---------- Surprise Box ---------- */
+.boxWrap{
+  display:flex;
+  justify-content:center;
+  margin:8px 0 2px;
+}
+.surpriseBox{
+  width:110px;
+  height:110px;
+  border-radius:18px;
+  border:none;
+  cursor:pointer;
+  background:linear-gradient(180deg,#ff5a7a,#ff2f62);
+  box-shadow:0 10px 22px rgba(255,47,98,0.28);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  position:relative;
+  animation:pulse 1.6s infinite, glow 1.7s infinite;
+}
+.surpriseBox:before{
+  content:"🎁";
+  font-size:54px;
+  transform:translateY(2px);
+}
+.surpriseHint{
+  font-size:14px;
+  font-weight:700;
+  color:#ff2f62;
+  margin-top:6px;
+}
+
 /* WhatsApp-style typing bubble */
 .typingWrap{
   display:flex;
   justify-content:center;
   align-items:center;
-  margin:10px 0 0;
+  margin:12px 0 0;
   min-height:70px;
-  transition:opacity 0.6s ease; /* smooth fade out */
+  transition:opacity 0.6s ease;
 }
-
 .typingBubble{
   background:#e9f7ef;
   border-radius:16px;
@@ -55,7 +86,6 @@ img{
   box-shadow:0 6px 18px rgba(0,0,0,0.08);
   position:relative;
 }
-
 .typingBubble::after{
   content:"";
   position:absolute;
@@ -66,19 +96,16 @@ img{
   border-right:10px solid transparent;
   border-top:10px solid #e9f7ef;
 }
-
 .typingName{
   font-weight:700;
   color:#1f7a4d;
   font-size:14px;
 }
-
 .dots{
   display:flex;
   gap:5px;
   align-items:center;
 }
-
 .dot{
   width:7px;
   height:7px;
@@ -89,7 +116,6 @@ img{
 }
 .dot:nth-child(2){animation-delay:.15s;}
 .dot:nth-child(3){animation-delay:.3s;}
-
 @keyframes bounce{
   0%, 80%, 100%{transform:translateY(0); opacity:.35;}
   40%{transform:translateY(-5px); opacity:1;}
@@ -121,7 +147,6 @@ button{
   animation:pulse 1.6s infinite;
 }
 
-/* YES glow upgrade */
 .yes{
   background:#ff3366;
   color:white;
@@ -129,7 +154,6 @@ button{
   animation:pulse 1.6s infinite, glow 1.7s infinite;
   box-shadow:0 0 0 rgba(255,51,102,0.0);
 }
-
 @keyframes glow{
   0%{ box-shadow:0 0 0px rgba(255,51,102,0.0); }
   50%{ box-shadow:0 0 22px rgba(255,51,102,0.55); }
@@ -164,14 +188,13 @@ button{
   z-index:999;
   animation:burst 900ms ease-out forwards;
 }
-
 @keyframes burst{
   0%{opacity:0; transform:translate(-50%,-50%) scale(.5);}
   15%{opacity:1; transform:translate(-50%,-50%) scale(1.2);}
   100%{opacity:0; transform:translate(-50%,-120%) scale(1.8);}
 }
 
-/* butterflies (hearts) */
+/* falling hearts */
 .butterfly{
   position:fixed;
   top:-10px;
@@ -183,8 +206,18 @@ button{
   to{transform:translateY(110vh);}
 }
 
+/* Screens */
+#giftScreen{display:block;}
+#messageScreen{display:none;}
 #secondScreen{display:none;}
 #valentineBlock{display:none;}
+
+/* helper fade */
+.fadeOut{
+  opacity:0;
+  transform:scale(.98);
+  transition:opacity .6s ease, transform .6s ease;
+}
 </style>
 </head>
 
@@ -192,15 +225,17 @@ button{
 
 <div class="container">
 
-<!-- FIRST SCREEN -->
-<div id="firstScreen">
+<!-- SCREEN 0: GM + Surprise Box -->
+<div id="giftScreen">
+  <img id="gmImg" src="gm.gif" alt="gm">
 
-  <img src="Reply me love.gif">
+  <div class="boxWrap">
+    <button id="boxBtn" class="surpriseBox" onclick="openGift()" aria-label="Open Surprise"></button>
+  </div>
+  <div class="surpriseHint">Tap the surprise 🎀</div>
 
-  <h2>Hi Baby❤️</h2>
-
-  <!-- WhatsApp-style typing bubble (will fade out) -->
-  <div id="typingBubbleWrap" class="typingWrap">
+  <!-- Typing bubble appears AFTER box click -->
+  <div id="typingBubbleWrap" class="typingWrap" style="display:none;">
     <div class="typingBubble">
       <div class="typingName">Bhawna</div>
       <div style="font-size:14px;color:#1f7a4d;opacity:.9;">is typing</div>
@@ -210,11 +245,24 @@ button{
     </div>
   </div>
 
-  <!-- Message text (hidden initially, shown after Open Message click) -->
+  <!-- Open Message shows AFTER typing -->
+  <div class="buttons">
+    <button id="openBtn" class="openMsg" onclick="enterMessageScreen()" style="display:none;">
+      💌 Open Message
+    </button>
+  </div>
+</div>
+
+<!-- SCREEN 1: Message screen (Reply me love.gif first) -->
+<div id="messageScreen">
+  <img src="Reply me love.gif" alt="reply">
+
+  <h2>Hi Baby❤️</h2>
+
   <div id="typingText" style="opacity:0;"></div>
 
   <div class="buttons">
-    <button id="openBtn" class="openMsg" onclick="openMessage()" style="display:none;">
+    <button id="revealBtn" class="openMsg" onclick="openMessage()">
       💌 Open Message
     </button>
   </div>
@@ -225,12 +273,11 @@ button{
       <button class="no" id="noBtn" onclick="moveNo()">NO 🙈</button>
     </div>
   </div>
-
 </div>
 
-<!-- SECOND SCREEN -->
+<!-- SCREEN 2 -->
 <div id="secondScreen">
-  <img src="Love me.gif">
+  <img src="Love me.gif" alt="love">
   <h2>Come meet me soon baby 😘</h2>
   <p>I am waiting ❤️</p>
 </div>
@@ -241,34 +288,11 @@ button{
   <source src="hawayein.mp3.mp3" type="audio/mpeg">
 </audio>
 
-<!-- Optional pop sound (keep if you have pop.mp3) -->
 <audio id="popSound" preload="auto">
   <source src="pop.mp3" type="audio/mpeg">
 </audio>
 
 <script>
-/* ---------------------------
-   Show Open Message after 4s
-   + Smooth fade out typing bubble
---------------------------- */
-setTimeout(() => {
-  document.getElementById("openBtn").style.display = "inline-block";
-
-  // fade out WhatsApp typing bubble
-  const wrap = document.getElementById("typingBubbleWrap");
-  wrap.style.opacity = "0";
-
-  // optional pop sound (may be blocked until user interaction)
-  const pop = document.getElementById("popSound");
-  pop.play().catch(()=>{});
-
-  // after fade, fully hide it so spacing collapses
-  setTimeout(() => {
-    wrap.style.display = "none";
-  }, 650);
-
-}, 4000);
-
 /* ---------------------------
    Heart burst animation helper
 --------------------------- */
@@ -287,12 +311,54 @@ function heartBurst(){
 }
 
 /* ---------------------------
-   Open Message:
+   Step 1: Click Surprise Box
    - Start song
-   - Show question
-   - Heart pop burst
-   - Hide open button
-   - Show YES/NO
+   - Show typing bubble
+   - After a moment show Open Message button
+--------------------------- */
+function openGift(){
+  const music = document.getElementById("bgMusic");
+  music.play().catch(()=>{});
+
+  const pop = document.getElementById("popSound");
+  pop.play().catch(()=>{});
+
+  heartBurst();
+
+  // hide box so user doesn't click again
+  document.getElementById("boxBtn").style.display = "none";
+
+  // show typing bubble
+  const bubble = document.getElementById("typingBubbleWrap");
+  bubble.style.display = "flex";
+  bubble.style.opacity = "1";
+
+  // after 3.5s show Open Message
+  setTimeout(() => {
+    document.getElementById("openBtn").style.display = "inline-block";
+  }, 3500);
+}
+
+/* ---------------------------
+   Step 2: Click Open Message (from gift screen)
+   - Vanish gm.jpg screen
+   - Show Reply me love.gif screen
+--------------------------- */
+function enterMessageScreen(){
+  const gift = document.getElementById("giftScreen");
+
+  // fade out gift screen smoothly
+  gift.classList.add("fadeOut");
+
+  setTimeout(() => {
+    gift.style.display = "none";
+    document.getElementById("messageScreen").style.display = "block";
+  }, 650);
+}
+
+/* ---------------------------
+   Step 3: Open Message (inside message screen)
+   - Show question + YES/NO
 --------------------------- */
 function openMessage(){
   const music = document.getElementById("bgMusic");
@@ -304,23 +370,21 @@ function openMessage(){
   text.innerHTML = "Prabhakar… will you be my Valentine? 🥺💌";
   text.style.opacity = "1";
 
-  document.getElementById("openBtn").style.display = "none";
+  document.getElementById("revealBtn").style.display = "none";
   document.getElementById("valentineBlock").style.display = "block";
 }
 
 /* ---------------------------
    YES Button:
    - Go to second screen
-   - Butterflies/hearts
+   - Falling hearts
 --------------------------- */
 function yes(){
   if(navigator.vibrate){
     navigator.vibrate([200,100,200,100,300]);
   }
-
-  document.getElementById("firstScreen").style.display="none";
+  document.getElementById("messageScreen").style.display="none";
   document.getElementById("secondScreen").style.display="block";
-
   startButterflies();
 }
 
@@ -334,7 +398,7 @@ function moveNo(){
 }
 
 /* ---------------------------
-   Falling hearts (butterflies)
+   Falling hearts
 --------------------------- */
 function startButterflies(){
   setInterval(function(){
@@ -351,4 +415,3 @@ function startButterflies(){
 
 </body>
 </html>
-
