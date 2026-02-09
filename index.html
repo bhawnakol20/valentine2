@@ -72,7 +72,17 @@ img{
   100%{ box-shadow:0 0 0px rgba(255,51,102,0.0); }
 }
 
-/* WhatsApp-style typing bubble */
+/* Hint below box */
+.surpriseHint{
+  font-size:15px;
+  font-weight:700;
+  color:#ff2f62;
+  margin-top:6px;
+  opacity:1;
+  transition:opacity .6s ease;
+}
+
+/* WhatsApp typing bubble */
 .typingWrap{
   display:flex;
   justify-content:center;
@@ -81,6 +91,7 @@ img{
   min-height:70px;
   transition:opacity 0.6s ease;
 }
+
 .typingBubble{
   background:#e9f7ef;
   border-radius:16px;
@@ -152,7 +163,7 @@ button{
   animation:pulse 1.6s infinite;
 }
 
-/* Message text area */
+/* Valentine message text */
 #typingText{
   min-height:60px;
   font-size:20px;
@@ -161,6 +172,7 @@ button{
   transition:opacity 0.6s ease;
 }
 
+/* YES/NO Buttons */
 .yes{
   background:#ff3366;
   color:white;
@@ -178,7 +190,7 @@ button{
   margin-top:15px;
 }
 
-/* heart pop burst */
+/* heart pop */
 .heartBurst{
   position:fixed;
   left:50%;
@@ -207,42 +219,38 @@ button{
   to{transform:translateY(110vh);}
 }
 
-/* Screens */
 #giftScreen{display:block;}
 #messageScreen{display:none;}
 #secondScreen{display:none;}
 #valentineBlock{display:none;}
+
 </style>
 </head>
 
 <body>
 <div class="container">
 
-<!-- SCREEN 0: Start with Surprise Box only -->
+<!-- SCREEN 0: Surprise Box Start -->
 <div id="giftScreen">
 
-  <!-- gm.gif will appear after click -->
-  <img id="gmGif" src="gm.gif" alt="gm" style="display:none;">
+  <img id="gmGif" src="gm.gif" style="display:none;">
 
   <div class="boxWrap">
-    <button id="boxBtn" class="surpriseBox" onclick="openGift()" aria-label="Open Surprise"></button>
+    <button id="boxBtn" class="surpriseBox" onclick="openGift()"></button>
   </div>
 
-  <!-- Typing bubble appears after click -->
+  <div id="surpriseHint" class="surpriseHint">Tap the surprise box 🎁</div>
+
   <div id="typingBubbleWrap" class="typingWrap" style="display:none;">
     <div class="typingBubble">
       <div class="typingName">Bhawna</div>
       <div style="font-size:14px;color:#1f7a4d;opacity:.9;">is typing</div>
-      <div class="dots" aria-hidden="true">
-        <span class="dot"></span><span class="dot"></span><span class="dot"></span>
-      </div>
+      <div class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
     </div>
   </div>
 
-  <!-- Greeting appears AFTER 5 seconds -->
   <div id="greetText"></div>
 
-  <!-- Open Message appears AFTER greeting -->
   <div class="buttons">
     <button id="openBtn" class="openMsg" onclick="enterMessageScreen()" style="display:none;">
       💌 Open Message
@@ -251,11 +259,11 @@ button{
 
 </div>
 
-<!-- SCREEN 1: Message screen (same as your old flow after Open Message) -->
+<!-- SCREEN 1 -->
 <div id="messageScreen">
-  <img src="Reply me love.gif" alt="reply">
+  <img src="Reply me love.gif">
 
-  
+  <h2>Hi Baby❤️</h2>
 
   <div id="typingText" style="opacity:0;"></div>
 
@@ -275,7 +283,7 @@ button{
 
 <!-- SCREEN 2 -->
 <div id="secondScreen">
-  <img src="Love me.gif" alt="love">
+  <img src="Love me.gif">
   <h2>Come meet me soon baby 😘</h2>
   <p>I am waiting ❤️</p>
 </div>
@@ -293,82 +301,71 @@ button{
 <script>
 function heartBurst(){
   for(let i=0;i<6;i++){
-    const h = document.createElement("div");
-    h.className = "heartBurst";
-    h.textContent = "💖";
-    h.style.left = (50 + (Math.random()*20-10)) + "%";
-    h.style.top  = (52 + (Math.random()*10-5)) + "%";
-    h.style.fontSize = (18 + Math.random()*18) + "px";
-    h.style.animationDuration = (700 + Math.random()*350) + "ms";
+    const h=document.createElement("div");
+    h.className="heartBurst";
+    h.textContent="💖";
+    h.style.left=(50+(Math.random()*20-10))+"%";
+    h.style.top=(52+(Math.random()*10-5))+"%";
+    h.style.fontSize=(18+Math.random()*18)+"px";
     document.body.appendChild(h);
-    setTimeout(()=>h.remove(), 1100);
+    setTimeout(()=>h.remove(),1100);
   }
 }
 
-/* Step 1: click surprise
-   - show gm.gif
-   - start song
-   - show typing 5s
-   - then show greeting + open message
-*/
+/* SEQUENCE HANDLER */
 function openGift(){
-  // start audio (user click => allowed)
-  const music = document.getElementById("bgMusic");
+  const music=document.getElementById("bgMusic");
   music.play().catch(()=>{});
-
-  const pop = document.getElementById("popSound");
-  pop.play().catch(()=>{});
-
+  document.getElementById("popSound").play().catch(()=>{});
   heartBurst();
 
-  // hide box immediately
-  document.getElementById("boxBtn").style.display = "none";
+  // fade out hint
+  const hint=document.getElementById("surpriseHint");
+  hint.style.opacity="0";
+  setTimeout(()=>{ hint.style.display="none"; },600);
 
-  // show gm.gif
-  document.getElementById("gmGif").style.display = "block";
+  // hide box
+  document.getElementById("boxBtn").style.display="none";
+
+  // show gm gif
+  document.getElementById("gmGif").style.display="block";
 
   // show typing bubble
-  const bubble = document.getElementById("typingBubbleWrap");
-  bubble.style.display = "flex";
-  bubble.style.opacity = "1";
+  const bubble=document.getElementById("typingBubbleWrap");
+  bubble.style.display="flex";
+  bubble.style.opacity="1";
 
-  // After 5s: hide typing, show greeting + Open Message
-  setTimeout(() => {
-    bubble.style.opacity = "0";
-    setTimeout(()=>{ bubble.style.display="none"; }, 650);
+  // after 5 sec → hide typing and show greeting + open message
+  setTimeout(()=>{
+    bubble.style.opacity="0";
+    setTimeout(()=>bubble.style.display="none",650);
 
-    const greet = document.getElementById("greetText");
-    greet.innerHTML = "Hi Baby…<br>Good Morning ☀️💛";
-    greet.style.opacity = "1";
+    const greet=document.getElementById("greetText");
+    greet.innerHTML="Hi Baby…<br>Good Morning ☀️💛";
+    greet.style.opacity="1";
 
-    document.getElementById("openBtn").style.display = "inline-block";
-  }, 5000);
+    document.getElementById("openBtn").style.display="inline-block";
+  },5000);
 }
 
-/* Step 2: Open Message (from gift screen)
-   - hide gift screen
-   - show Reply me love.gif screen
-*/
+/* Open Message Screen */
 function enterMessageScreen(){
-  document.getElementById("giftScreen").style.display = "none";
-  document.getElementById("messageScreen").style.display = "block";
+  document.getElementById("giftScreen").style.display="none";
+  document.getElementById("messageScreen").style.display="block";
 }
 
-/* Step 3: same as before */
+/* Valentine proposal */
 function openMessage(){
-  const music = document.getElementById("bgMusic");
-  music.play().catch(()=>{});
-
   heartBurst();
+  const text=document.getElementById("typingText");
+  text.innerHTML="Prabhakar… will you be my Valentine? 🥺💌";
+  text.style.opacity="1";
 
-  const text = document.getElementById("typingText");
-  text.innerHTML = "Prabhakar… will you be my Valentine? 🥺💌";
-  text.style.opacity = "1";
-
-  document.getElementById("revealBtn").style.display = "none";
-  document.getElementById("valentineBlock").style.display = "block";
+  document.getElementById("revealBtn").style.display="none";
+  document.getElementById("valentineBlock").style.display="block";
 }
 
+/* YES */
 function yes(){
   if(navigator.vibrate){
     navigator.vibrate([200,100,200,100,300]);
@@ -378,6 +375,7 @@ function yes(){
   startButterflies();
 }
 
+/* NO Button move */
 function moveNo(){
   var btn=document.getElementById("noBtn");
   btn.style.left=Math.random()*120+"px";
@@ -385,7 +383,7 @@ function moveNo(){
 }
 
 function startButterflies(){
-  setInterval(function(){
+  setInterval(()=>{
     var b=document.createElement("div");
     b.className="butterfly";
     b.innerHTML="❤️";
@@ -399,4 +397,3 @@ function startButterflies(){
 
 </body>
 </html>
-
