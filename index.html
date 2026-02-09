@@ -42,9 +42,9 @@ img{
   margin:8px 0 2px;
 }
 .surpriseBox{
-  width:110px;
-  height:110px;
-  border-radius:18px;
+  width:120px;
+  height:120px;
+  border-radius:20px;
   border:none;
   cursor:pointer;
   background:linear-gradient(180deg,#ff5a7a,#ff2f62);
@@ -57,14 +57,19 @@ img{
 }
 .surpriseBox:before{
   content:"🎁";
-  font-size:54px;
+  font-size:58px;
   transform:translateY(2px);
 }
-.surpriseHint{
-  font-size:14px;
-  font-weight:700;
-  color:#ff2f62;
-  margin-top:6px;
+
+@keyframes pulse{
+  0%{transform:scale(1);}
+  50%{transform:scale(1.08);}
+  100%{transform:scale(1);}
+}
+@keyframes glow{
+  0%{ box-shadow:0 0 0px rgba(255,51,102,0.0); }
+  50%{ box-shadow:0 0 22px rgba(255,51,102,0.55); }
+  100%{ box-shadow:0 0 0px rgba(255,51,102,0.0); }
 }
 
 /* WhatsApp-style typing bubble */
@@ -121,13 +126,14 @@ img{
   40%{transform:translateY(-5px); opacity:1;}
 }
 
-/* Message text area */
-#typingText{
-  min-height:60px;
+/* Greeting text */
+#greetText{
+  min-height:52px;
   font-size:20px;
-  font-weight:800;
+  font-weight:900;
   margin-top:10px;
-  transition:opacity 0.6s ease;
+  opacity:0;
+  transition:opacity .6s ease;
 }
 
 button{
@@ -137,14 +143,22 @@ button{
   border-radius:10px;
   margin:8px;
   cursor:pointer;
-  width:160px;
+  width:170px;
 }
 
 .openMsg{
   background:#6a5acd;
   color:white;
-  width:170px;
   animation:pulse 1.6s infinite;
+}
+
+/* Message text area */
+#typingText{
+  min-height:60px;
+  font-size:20px;
+  font-weight:800;
+  margin-top:10px;
+  transition:opacity 0.6s ease;
 }
 
 .yes{
@@ -152,24 +166,11 @@ button{
   color:white;
   width:120px;
   animation:pulse 1.6s infinite, glow 1.7s infinite;
-  box-shadow:0 0 0 rgba(255,51,102,0.0);
 }
-@keyframes glow{
-  0%{ box-shadow:0 0 0px rgba(255,51,102,0.0); }
-  50%{ box-shadow:0 0 22px rgba(255,51,102,0.55); }
-  100%{ box-shadow:0 0 0px rgba(255,51,102,0.0); }
-}
-
 .no{
   background:#ddd;
   position:absolute;
   width:120px;
-}
-
-@keyframes pulse{
-  0%{transform:scale(1);}
-  50%{transform:scale(1.08);}
-  100%{transform:scale(1);}
 }
 
 .buttons{
@@ -211,30 +212,23 @@ button{
 #messageScreen{display:none;}
 #secondScreen{display:none;}
 #valentineBlock{display:none;}
-
-/* helper fade */
-.fadeOut{
-  opacity:0;
-  transform:scale(.98);
-  transition:opacity .6s ease, transform .6s ease;
-}
 </style>
 </head>
 
 <body>
-
 <div class="container">
 
-<!-- SCREEN 0: GM + Surprise Box -->
+<!-- SCREEN 0: Start with Surprise Box only -->
 <div id="giftScreen">
-  <img id="gmImg" src="gm.gif" alt="gm">
+
+  <!-- gm.gif will appear after click -->
+  <img id="gmGif" src="gm.gif" alt="gm" style="display:none;">
 
   <div class="boxWrap">
     <button id="boxBtn" class="surpriseBox" onclick="openGift()" aria-label="Open Surprise"></button>
   </div>
-  <div class="surpriseHint">Tap the surprise 🎀</div>
 
-  <!-- Typing bubble appears AFTER box click -->
+  <!-- Typing bubble appears after click -->
   <div id="typingBubbleWrap" class="typingWrap" style="display:none;">
     <div class="typingBubble">
       <div class="typingName">Bhawna</div>
@@ -245,15 +239,19 @@ button{
     </div>
   </div>
 
-  <!-- Open Message shows AFTER typing -->
+  <!-- Greeting appears AFTER 5 seconds -->
+  <div id="greetText"></div>
+
+  <!-- Open Message appears AFTER greeting -->
   <div class="buttons">
     <button id="openBtn" class="openMsg" onclick="enterMessageScreen()" style="display:none;">
       💌 Open Message
     </button>
   </div>
+
 </div>
 
-<!-- SCREEN 1: Message screen (Reply me love.gif first) -->
+<!-- SCREEN 1: Message screen (same as your old flow after Open Message) -->
 <div id="messageScreen">
   <img src="Reply me love.gif" alt="reply">
 
@@ -293,9 +291,6 @@ button{
 </audio>
 
 <script>
-/* ---------------------------
-   Heart burst animation helper
---------------------------- */
 function heartBurst(){
   for(let i=0;i<6;i++){
     const h = document.createElement("div");
@@ -310,13 +305,14 @@ function heartBurst(){
   }
 }
 
-/* ---------------------------
-   Step 1: Click Surprise Box
-   - Start song
-   - Show typing bubble
-   - After a moment show Open Message button
---------------------------- */
+/* Step 1: click surprise
+   - show gm.gif
+   - start song
+   - show typing 5s
+   - then show greeting + open message
+*/
 function openGift(){
+  // start audio (user click => allowed)
   const music = document.getElementById("bgMusic");
   music.play().catch(()=>{});
 
@@ -325,41 +321,40 @@ function openGift(){
 
   heartBurst();
 
-  // hide box so user doesn't click again
+  // hide box immediately
   document.getElementById("boxBtn").style.display = "none";
+
+  // show gm.gif
+  document.getElementById("gmGif").style.display = "block";
 
   // show typing bubble
   const bubble = document.getElementById("typingBubbleWrap");
   bubble.style.display = "flex";
   bubble.style.opacity = "1";
 
-  // after 3.5s show Open Message
+  // After 5s: hide typing, show greeting + Open Message
   setTimeout(() => {
+    bubble.style.opacity = "0";
+    setTimeout(()=>{ bubble.style.display="none"; }, 650);
+
+    const greet = document.getElementById("greetText");
+    greet.innerHTML = "Hi Baby…<br>Good Morning ☀️💛";
+    greet.style.opacity = "1";
+
     document.getElementById("openBtn").style.display = "inline-block";
-  }, 3500);
+  }, 5000);
 }
 
-/* ---------------------------
-   Step 2: Click Open Message (from gift screen)
-   - Vanish gm.jpg screen
-   - Show Reply me love.gif screen
---------------------------- */
+/* Step 2: Open Message (from gift screen)
+   - hide gift screen
+   - show Reply me love.gif screen
+*/
 function enterMessageScreen(){
-  const gift = document.getElementById("giftScreen");
-
-  // fade out gift screen smoothly
-  gift.classList.add("fadeOut");
-
-  setTimeout(() => {
-    gift.style.display = "none";
-    document.getElementById("messageScreen").style.display = "block";
-  }, 650);
+  document.getElementById("giftScreen").style.display = "none";
+  document.getElementById("messageScreen").style.display = "block";
 }
 
-/* ---------------------------
-   Step 3: Open Message (inside message screen)
-   - Show question + YES/NO
---------------------------- */
+/* Step 3: same as before */
 function openMessage(){
   const music = document.getElementById("bgMusic");
   music.play().catch(()=>{});
@@ -374,11 +369,6 @@ function openMessage(){
   document.getElementById("valentineBlock").style.display = "block";
 }
 
-/* ---------------------------
-   YES Button:
-   - Go to second screen
-   - Falling hearts
---------------------------- */
 function yes(){
   if(navigator.vibrate){
     navigator.vibrate([200,100,200,100,300]);
@@ -388,18 +378,12 @@ function yes(){
   startButterflies();
 }
 
-/* ---------------------------
-   NO Button Moves
---------------------------- */
 function moveNo(){
   var btn=document.getElementById("noBtn");
   btn.style.left=Math.random()*120+"px";
   btn.style.top=Math.random()*120+"px";
 }
 
-/* ---------------------------
-   Falling hearts
---------------------------- */
 function startButterflies(){
   setInterval(function(){
     var b=document.createElement("div");
