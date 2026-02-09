@@ -6,88 +6,100 @@
 
 <style>
 body{
-margin:0;
-padding:0;
-font-family:system-ui,Arial;
-background:linear-gradient(135deg,#ff9aa2,#ffd1dc);
-display:flex;
-justify-content:center;
-align-items:center;
-height:100vh;
-text-align:center;
-overflow:hidden;
+  margin:0;
+  padding:0;
+  font-family:system-ui,Arial;
+  background:linear-gradient(135deg,#ff9aa2,#ffd1dc);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  text-align:center;
+  overflow:hidden;
 }
 
 .container{
-background:white;
-padding:20px;
-border-radius:18px;
-width:90%;
-max-width:360px;
-box-shadow:0 10px 25px rgba(0,0,0,0.15);
-position:relative;
-z-index:2;
+  background:white;
+  padding:20px;
+  border-radius:18px;
+  width:90%;
+  max-width:360px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.15);
+  position:relative;
+  z-index:2;
 }
 
 img{
-width:100%;
-border-radius:12px;
-margin-bottom:12px;
+  width:100%;
+  border-radius:12px;
+  margin-bottom:12px;
 }
 
 #typing{
-min-height:60px;
-font-size:20px;
-font-weight:bold;
+  min-height:60px;
+  font-size:20px;
+  font-weight:bold;
 }
 
 button{
-padding:14px 18px;
-font-size:16px;
-border:none;
-border-radius:10px;
-margin:8px;
-cursor:pointer;
-width:120px;
+  padding:14px 18px;
+  font-size:16px;
+  border:none;
+  border-radius:10px;
+  margin:8px;
+  cursor:pointer;
+  width:160px;
 }
 
 .yes{
-background:#ff3366;
-color:white;
-animation:pulse 1.6s infinite;
+  background:#ff3366;
+  color:white;
+  animation:pulse 1.6s infinite;
+  width:120px;
 }
 
 .no{
-background:#ddd;
-position:absolute;
+  background:#ddd;
+  position:absolute;
+  width:120px;
+}
+
+.openMsg{
+  background:#6a5acd;
+  color:white;
+  width:170px;
+  animation:pulse 1.6s infinite;
 }
 
 @keyframes pulse{
-0%{transform:scale(1);}
-50%{transform:scale(1.08);}
-100%{transform:scale(1);}
+  0%{transform:scale(1);}
+  50%{transform:scale(1.08);}
+  100%{transform:scale(1);}
 }
 
 .buttons{
-position:relative;
-margin-top:15px;
+  position:relative;
+  margin-top:15px;
 }
 
 /* butterflies */
 .butterfly{
-position:fixed;
-top:-10px;
-font-size:24px;
-animation:fall linear forwards;
-z-index:1;
+  position:fixed;
+  top:-10px;
+  font-size:24px;
+  animation:fall linear forwards;
+  z-index:1;
 }
 
 @keyframes fall{
-to{transform:translateY(110vh);}
+  to{transform:translateY(110vh);}
 }
 
 /* second screen hidden initially */
 #secondScreen{display:none;}
+
+/* hide valentine question + yes/no initially */
+#valentineBlock{display:none;}
 </style>
 </head>
 
@@ -98,81 +110,103 @@ to{transform:translateY(110vh);}
 <!-- FIRST SCREEN -->
 <div id="firstScreen">
 
-<img src="Reply me love.gif ">
+  <img src="Reply me love.gif">
 
-<h2>Hi Baby❤️</h2>
+  <h2>Hi Baby❤️</h2>
 
-<div id="typing">Bhawna is typing...</div>
+  <div id="typing">Bhawna is typing...</div>
 
-<div class="buttons">
-<button class="yes" onclick="yes()">YES 😍</button>
-<button class="no" id="noBtn" onclick="moveNo()">NO 🙈</button>
-</div>
+  <!-- Open Message button (hidden initially, shown after typing) -->
+  <div class="buttons">
+    <button id="openBtn" class="openMsg" onclick="openMessage()" style="display:none;">
+      💌 Open Message
+    </button>
+  </div>
+
+  <!-- Valentine question + YES/NO (hidden initially) -->
+  <div id="valentineBlock">
+    <div class="buttons">
+      <button class="yes" onclick="yes()">YES 😍</button>
+      <button class="no" id="noBtn" onclick="moveNo()">NO 🙈</button>
+    </div>
+  </div>
 
 </div>
 
 <!-- SECOND SCREEN -->
 <div id="secondScreen">
 
-<img src="Love me.gif">
+  <img src="Love me.gif">
 
-<h2>Come meet me soon baby 😘❤️</h2>
-<p>Now it's official… you & me… always ❤️</p>
-
-</div>
+  <h2>Come meet me soon baby 😘❤️</h2>
+  <p>Now it's official… you & me… always ❤️</p>
 
 </div>
 
-<audio id="bgMusic">
-<source src="hawayein.mp3.mp3" type="audio/mpeg">
+</div>
+
+<audio id="bgMusic" preload="auto">
+  <source src="hawayein.mp3.mp3" type="audio/mpeg">
 </audio>
 
 <script>
-
-// typing intro
+// 1) typing -> then show Open Message button
 setTimeout(()=>{
-document.getElementById("typing").innerHTML=
-"Prabhakar… will you be my Valentine? 🥺💌";
-},5000);
+  document.getElementById("openBtn").style.display = "inline-block";
+}, 4000);
 
+// 2) on clicking Open Message: play song + show question + show yes/no, hide open button
+function openMessage(){
+  const music = document.getElementById("bgMusic");
+
+  music.play().catch(err => {
+    console.log("Audio play blocked:", err);
+  });
+
+  document.getElementById("typing").innerHTML =
+    "Prabhakar… will you be my Valentine? 🥺💌";
+
+  // hide open button
+  document.getElementById("openBtn").style.display = "none";
+
+  // show yes/no block
+  document.getElementById("valentineBlock").style.display = "block";
+}
+
+// 3) YES -> second screen + butterflies (song already playing)
 function yes(){
+  if(navigator.vibrate){
+    navigator.vibrate([200,100,200,100,300]);
+  }
 
-document.getElementById("bgMusic").play();
+  // hide first screen
+  document.getElementById("firstScreen").style.display="none";
 
-if(navigator.vibrate){
-navigator.vibrate([200,100,200,100,300]);
+  // show second screen
+  document.getElementById("secondScreen").style.display="block";
+
+  startButterflies();
 }
 
-// hide first screen
-document.getElementById("firstScreen").style.display="none";
-
-// show second screen
-document.getElementById("secondScreen").style.display="block";
-
-startButterflies();
-}
-
+// NO button moves
 function moveNo(){
-var btn=document.getElementById("noBtn");
-btn.style.left=Math.random()*120+"px";
-btn.style.top=Math.random()*120+"px";
+  var btn=document.getElementById("noBtn");
+  btn.style.left=Math.random()*120+"px";
+  btn.style.top=Math.random()*120+"px";
 }
 
 function startButterflies(){
-setInterval(function(){
-var b=document.createElement("div");
-b.className="butterfly";
-b.innerHTML="❤️";
-b.style.left=Math.random()*100+"vw";
-b.style.animationDuration=(3+Math.random()*3)+"s";
-document.body.appendChild(b);
-setTimeout(()=>b.remove(),6000);
-},300);
+  setInterval(function(){
+    var b=document.createElement("div");
+    b.className="butterfly";
+    b.innerHTML="❤️";
+    b.style.left=Math.random()*100+"vw";
+    b.style.animationDuration=(3+Math.random()*3)+"s";
+    document.body.appendChild(b);
+    setTimeout(()=>b.remove(),6000);
+  },300);
 }
-
 </script>
 
 </body>
 </html>
-
-
