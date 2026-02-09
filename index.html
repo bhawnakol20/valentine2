@@ -5,238 +5,278 @@
 <title>For you Baby❤️</title>
 
 <style>
-body{
-  margin:0;
-  padding:0;
-  font-family:system-ui,Arial;
-  background:linear-gradient(135deg,#ff9aa2,#ffd1dc);
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  height:100vh;
-  text-align:center;
-  overflow:hidden;
-}
+  body{
+    margin:0;
+    padding:0;
+    font-family:system-ui,Arial;
+    background:linear-gradient(135deg,#ff9aa2,#ffd1dc);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    text-align:center;
+    overflow:hidden;
+  }
 
-.container{
-  background:white;
-  padding:20px;
-  border-radius:18px;
-  width:90%;
-  max-width:360px;
-  box-shadow:0 10px 25px rgba(0,0,0,0.15);
-  position:relative;
-  z-index:2;
-}
+  .container{
+    background:white;
+    padding:20px;
+    border-radius:18px;
+    width:90%;
+    max-width:360px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.15);
+    position:relative;
+    z-index:2;
+  }
 
-img{
-  width:100%;
-  border-radius:12px;
-  margin-bottom:12px;
-}
+  img{
+    width:100%;
+    border-radius:12px;
+    margin-bottom:12px;
+  }
 
-/* ---------- Surprise Box ---------- */
-.boxWrap{
-  display:flex;
-  justify-content:center;
-  margin:8px 0 2px;
-}
-.surpriseBox{
-  width:120px;
-  height:120px;
-  border-radius:20px;
-  border:none;
-  cursor:pointer;
-  background:linear-gradient(180deg,#ff5a7a,#ff2f62);
-  box-shadow:0 10px 22px rgba(255,47,98,0.28);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  position:relative;
-  animation:pulse 1.6s infinite, glow 1.7s infinite;
-}
-.surpriseBox:before{
-  content:"🎁";
-  font-size:58px;
-  transform:translateY(2px);
-}
+  /* Screen transitions */
+  .screen{
+    transition:opacity .6s ease, transform .6s ease;
+    opacity:1;
+    transform:translateY(0);
+  }
+  .hideScreen{
+    opacity:0;
+    transform:translateY(10px);
+    pointer-events:none;
+  }
 
-@keyframes pulse{
-  0%{transform:scale(1);}
-  50%{transform:scale(1.08);}
-  100%{transform:scale(1);}
-}
-@keyframes glow{
-  0%{ box-shadow:0 0 0px rgba(255,51,102,0.0); }
-  50%{ box-shadow:0 0 22px rgba(255,51,102,0.55); }
-  100%{ box-shadow:0 0 0px rgba(255,51,102,0.0); }
-}
+  /* ---------- Surprise Box ---------- */
+  .boxWrap{ display:flex; justify-content:center; margin:10px 0 2px; }
+  .surpriseBox{
+    width:125px;
+    height:125px;
+    border-radius:22px;
+    border:none;
+    cursor:pointer;
+    background:linear-gradient(180deg,#ff5a7a,#ff2f62);
+    box-shadow:0 14px 26px rgba(255,47,98,0.28);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    animation:pulse 1.6s infinite, glow 1.7s infinite;
+    overflow:hidden;
+  }
 
-/* Hint below box */
-.surpriseHint{
-  font-size:15px;
-  font-weight:700;
-  color:#ff2f62;
-  margin-top:6px;
-  opacity:1;
-  transition:opacity .6s ease;
-}
+  /* shiny sweep */
+  .surpriseBox::after{
+    content:"";
+    position:absolute;
+    top:-40%;
+    left:-60%;
+    width:60%;
+    height:180%;
+    background:rgba(255,255,255,.35);
+    transform:rotate(25deg);
+    animation:sweep 2.4s infinite;
+    filter:blur(1px);
+  }
+  @keyframes sweep{
+    0%{ left:-70%; opacity:0; }
+    25%{ opacity:.55; }
+    55%{ left:130%; opacity:0; }
+    100%{ left:130%; opacity:0; }
+  }
 
-/* WhatsApp typing bubble */
-.typingWrap{
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  margin:12px 0 0;
-  min-height:70px;
-  transition:opacity 0.6s ease;
-}
+  .surpriseBox:before{
+    content:"🎁";
+    font-size:62px;
+    transform:translateY(2px);
+    filter:drop-shadow(0 6px 10px rgba(0,0,0,.10));
+  }
 
-.typingBubble{
-  background:#e9f7ef;
-  border-radius:16px;
-  padding:10px 14px;
-  display:flex;
-  align-items:center;
-  gap:10px;
-  box-shadow:0 6px 18px rgba(0,0,0,0.08);
-  position:relative;
-}
-.typingBubble::after{
-  content:"";
-  position:absolute;
-  left:14px;
-  bottom:-8px;
-  width:0;height:0;
-  border-left:10px solid transparent;
-  border-right:10px solid transparent;
-  border-top:10px solid #e9f7ef;
-}
-.typingName{
-  font-weight:700;
-  color:#1f7a4d;
-  font-size:14px;
-}
-.dots{
-  display:flex;
-  gap:5px;
-  align-items:center;
-}
-.dot{
-  width:7px;
-  height:7px;
-  border-radius:50%;
-  background:#1f7a4d;
-  opacity:.35;
-  animation:bounce 1s infinite;
-}
-.dot:nth-child(2){animation-delay:.15s;}
-.dot:nth-child(3){animation-delay:.3s;}
-@keyframes bounce{
-  0%, 80%, 100%{transform:translateY(0); opacity:.35;}
-  40%{transform:translateY(-5px); opacity:1;}
-}
+  @keyframes pulse{
+    0%{transform:scale(1);}
+    50%{transform:scale(1.08);}
+    100%{transform:scale(1);}
+  }
+  @keyframes glow{
+    0%{ box-shadow:0 0 0px rgba(255,51,102,0.0), 0 14px 26px rgba(255,47,98,0.28); }
+    50%{ box-shadow:0 0 22px rgba(255,51,102,0.55), 0 18px 34px rgba(255,47,98,0.22); }
+    100%{ box-shadow:0 0 0px rgba(255,51,102,0.0), 0 14px 26px rgba(255,47,98,0.28); }
+  }
 
-/* Greeting text */
-#greetText{
-  min-height:52px;
-  font-size:20px;
-  font-weight:900;
-  margin-top:10px;
-  opacity:0;
-  transition:opacity .6s ease;
-}
+  .surpriseHint{
+    font-size:15px;
+    font-weight:800;
+    color:#ff2f62;
+    margin-top:8px;
+    opacity:1;
+    transition:opacity .55s ease;
+    letter-spacing:.2px;
+  }
+  .hintFade{ opacity:0; }
 
-button{
-  padding:14px 18px;
-  font-size:16px;
-  border:none;
-  border-radius:10px;
-  margin:8px;
-  cursor:pointer;
-  width:170px;
-}
+  /* gm.gif subtle float */
+  .gmFloat{
+    animation:float 2.6s ease-in-out infinite;
+  }
+  @keyframes float{
+    0%,100%{ transform:translateY(0); }
+    50%{ transform:translateY(-6px); }
+  }
 
-.openMsg{
-  background:#6a5acd;
-  color:white;
-  animation:pulse 1.6s infinite;
-}
+  /* WhatsApp typing bubble */
+  .typingWrap{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    margin:12px 0 0;
+    min-height:70px;
+    transition:opacity 0.6s ease;
+  }
+  .typingBubble{
+    background:#e9f7ef;
+    border-radius:16px;
+    padding:10px 14px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    box-shadow:0 6px 18px rgba(0,0,0,0.08);
+    position:relative;
+  }
+  .typingBubble::after{
+    content:"";
+    position:absolute;
+    left:14px;
+    bottom:-8px;
+    width:0;height:0;
+    border-left:10px solid transparent;
+    border-right:10px solid transparent;
+    border-top:10px solid #e9f7ef;
+  }
+  .typingName{ font-weight:800; color:#1f7a4d; font-size:14px; }
+  .dots{ display:flex; gap:5px; align-items:center; }
+  .dot{
+    width:7px;height:7px;border-radius:50%;
+    background:#1f7a4d;
+    opacity:.35;
+    animation:bounce 1s infinite;
+  }
+  .dot:nth-child(2){animation-delay:.15s;}
+  .dot:nth-child(3){animation-delay:.3s;}
+  @keyframes bounce{
+    0%, 80%, 100%{transform:translateY(0); opacity:.35;}
+    40%{transform:translateY(-5px); opacity:1;}
+  }
 
-/* Valentine message text */
-#typingText{
-  min-height:60px;
-  font-size:20px;
-  font-weight:800;
-  margin-top:10px;
-  transition:opacity 0.6s ease;
-}
+  /* Greeting text */
+  #greetText{
+    min-height:58px;
+    font-size:20px;
+    font-weight:900;
+    margin-top:10px;
+    opacity:0;
+    transition:opacity .6s ease, transform .6s ease;
+    transform:translateY(6px);
+  }
+  .greetShow{
+    opacity:1 !important;
+    transform:translateY(0) !important;
+  }
 
-/* YES/NO Buttons */
-.yes{
-  background:#ff3366;
-  color:white;
-  width:120px;
-  animation:pulse 1.6s infinite, glow 1.7s infinite;
-}
-.no{
-  background:#ddd;
-  position:absolute;
-  width:120px;
-}
+  button{
+    padding:14px 18px;
+    font-size:16px;
+    border:none;
+    border-radius:10px;
+    margin:8px;
+    cursor:pointer;
+    width:175px;
+  }
 
-.buttons{
-  position:relative;
-  margin-top:15px;
-}
+  .openMsg{
+    background:#6a5acd;
+    color:white;
+    animation:pulse 1.6s infinite;
+  }
 
-/* heart pop */
-.heartBurst{
-  position:fixed;
-  left:50%;
-  top:52%;
-  transform:translate(-50%,-50%);
-  font-size:22px;
-  pointer-events:none;
-  z-index:999;
-  animation:burst 900ms ease-out forwards;
-}
-@keyframes burst{
-  0%{opacity:0; transform:translate(-50%,-50%) scale(.5);}
-  15%{opacity:1; transform:translate(-50%,-50%) scale(1.2);}
-  100%{opacity:0; transform:translate(-50%,-120%) scale(1.8);}
-}
+  /* little entrance bounce for open button */
+  .btnPop{
+    animation:btnPop .55s ease-out both;
+  }
+  @keyframes btnPop{
+    0%{ transform:translateY(10px) scale(.92); opacity:0; }
+    60%{ transform:translateY(-3px) scale(1.03); opacity:1; }
+    100%{ transform:translateY(0) scale(1); opacity:1; }
+  }
 
-/* falling hearts */
-.butterfly{
-  position:fixed;
-  top:-10px;
-  font-size:24px;
-  animation:fall linear forwards;
-  z-index:1;
-}
-@keyframes fall{
-  to{transform:translateY(110vh);}
-}
+  /* Valentine message area */
+  #typingText{
+    min-height:60px;
+    font-size:20px;
+    font-weight:800;
+    margin-top:10px;
+    transition:opacity 0.6s ease;
+  }
 
-#giftScreen{display:block;}
-#messageScreen{display:none;}
-#secondScreen{display:none;}
-#valentineBlock{display:none;}
+  .yes{
+    background:#ff3366;
+    color:white;
+    width:120px;
+    animation:pulse 1.6s infinite, glow 1.7s infinite;
+  }
+  .no{
+    background:#ddd;
+    position:absolute;
+    width:120px;
+  }
 
+  .buttons{ position:relative; margin-top:15px; }
+
+  /* heart burst */
+  .heartBurst{
+    position:fixed;
+    left:50%;
+    top:52%;
+    transform:translate(-50%,-50%);
+    font-size:22px;
+    pointer-events:none;
+    z-index:999;
+    animation:burst 900ms ease-out forwards;
+  }
+  @keyframes burst{
+    0%{opacity:0; transform:translate(-50%,-50%) scale(.5);}
+    15%{opacity:1; transform:translate(-50%,-50%) scale(1.2);}
+    100%{opacity:0; transform:translate(-50%,-120%) scale(1.8);}
+  }
+
+  /* falling hearts */
+  .butterfly{
+    position:fixed;
+    top:-10px;
+    font-size:24px;
+    animation:fall linear forwards;
+    z-index:1;
+  }
+  @keyframes fall{
+    to{transform:translateY(110vh);}
+  }
+
+  #giftScreen{display:block;}
+  #messageScreen{display:none;}
+  #secondScreen{display:none;}
+  #valentineBlock{display:none;}
 </style>
 </head>
 
 <body>
 <div class="container">
 
-<!-- SCREEN 0: Surprise Box Start -->
-<div id="giftScreen">
+<!-- SCREEN 0 -->
+<div id="giftScreen" class="screen">
 
-  <img id="gmGif" src="gm.gif" style="display:none;">
+  <img id="gmGif" src="gm.gif" style="display:none;" class="gmFloat" alt="gm">
 
   <div class="boxWrap">
-    <button id="boxBtn" class="surpriseBox" onclick="openGift()"></button>
+    <button id="boxBtn" class="surpriseBox" onclick="openGift()" aria-label="Tap surprise"></button>
   </div>
 
   <div id="surpriseHint" class="surpriseHint">Tap the surprise box 🎁</div>
@@ -245,7 +285,9 @@ button{
     <div class="typingBubble">
       <div class="typingName">Bhawna</div>
       <div style="font-size:14px;color:#1f7a4d;opacity:.9;">is typing</div>
-      <div class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+      <div class="dots" aria-hidden="true">
+        <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+      </div>
     </div>
   </div>
 
@@ -260,10 +302,10 @@ button{
 </div>
 
 <!-- SCREEN 1 -->
-<div id="messageScreen">
-  <img src="Reply me love.gif">
+<div id="messageScreen" class="screen">
+  <img src="Reply me love.gif" alt="reply">
 
- 
+  
 
   <div id="typingText" style="opacity:0;"></div>
 
@@ -282,14 +324,15 @@ button{
 </div>
 
 <!-- SCREEN 2 -->
-<div id="secondScreen">
-  <img src="Love me.gif">
+<div id="secondScreen" class="screen">
+  <img src="Love me.gif" alt="love">
   <h2>Come meet me soon baby 😘</h2>
   <p>I am waiting ❤️</p>
 </div>
 
 </div>
 
+<!-- Song NOT changed -->
 <audio id="bgMusic" preload="auto">
   <source src="hawayein.mp3.mp3" type="audio/mpeg">
 </audio>
@@ -299,102 +342,131 @@ button{
 </audio>
 
 <script>
-function heartBurst(){
-  for(let i=0;i<6;i++){
-    const h=document.createElement("div");
-    h.className="heartBurst";
-    h.textContent="💖";
-    h.style.left=(50+(Math.random()*20-10))+"%";
-    h.style.top=(52+(Math.random()*10-5))+"%";
-    h.style.fontSize=(18+Math.random()*18)+"px";
-    document.body.appendChild(h);
-    setTimeout(()=>h.remove(),1100);
+  function heartBurst(){
+    for(let i=0;i<7;i++){
+      const h=document.createElement("div");
+      h.className="heartBurst";
+      h.textContent=(Math.random()>.35) ? "💖" : "✨";
+      h.style.left=(50+(Math.random()*24-12))+"%";
+      h.style.top=(52+(Math.random()*12-6))+"%";
+      h.style.fontSize=(18+Math.random()*18)+"px";
+      document.body.appendChild(h);
+      setTimeout(()=>h.remove(),1100);
+    }
   }
-}
 
-/* SEQUENCE HANDLER */
-function openGift(){
-  const music=document.getElementById("bgMusic");
-  music.play().catch(()=>{});
-  document.getElementById("popSound").play().catch(()=>{});
-  heartBurst();
-
-  // fade out hint
-  const hint=document.getElementById("surpriseHint");
-  hint.style.opacity="0";
-  setTimeout(()=>{ hint.style.display="none"; },600);
-
-  // hide box
-  document.getElementById("boxBtn").style.display="none";
-
-  // show gm gif
-  document.getElementById("gmGif").style.display="block";
-
-  // show typing bubble
-  const bubble=document.getElementById("typingBubbleWrap");
-  bubble.style.display="flex";
-  bubble.style.opacity="1";
-
-  // after 5 sec → hide typing and show greeting + open message
-  setTimeout(()=>{
-    bubble.style.opacity="0";
-    setTimeout(()=>bubble.style.display="none",650);
-
-    const greet=document.getElementById("greetText");
-    greet.innerHTML="Hi Baby…<br>Good Morning ☀️💛";
-    greet.style.opacity="1";
-
-    document.getElementById("openBtn").style.display="inline-block";
-  },5000);
-}
-
-/* Open Message Screen */
-function enterMessageScreen(){
-  document.getElementById("giftScreen").style.display="none";
-  document.getElementById("messageScreen").style.display="block";
-}
-
-/* Valentine proposal */
-function openMessage(){
-  heartBurst();
-  const text=document.getElementById("typingText");
-  text.innerHTML="Prabhakar… will you be my Valentine? 🥺💌";
-  text.style.opacity="1";
-
-  document.getElementById("revealBtn").style.display="none";
-  document.getElementById("valentineBlock").style.display="block";
-}
-
-/* YES */
-function yes(){
-  if(navigator.vibrate){
-    navigator.vibrate([200,100,200,100,300]);
+  // Typewriter effect for greeting
+  function typeText(el, str, speed=45){
+    el.innerHTML = "";
+    let i = 0;
+    const timer = setInterval(()=>{
+      el.innerHTML = str.slice(0, i) + (i < str.length ? "<span style='opacity:.35'>|</span>" : "");
+      i++;
+      if(i > str.length){
+        clearInterval(timer);
+        el.innerHTML = str;
+      }
+    }, speed);
   }
-  document.getElementById("messageScreen").style.display="none";
-  document.getElementById("secondScreen").style.display="block";
-  startButterflies();
-}
 
-/* NO Button move */
-function moveNo(){
-  var btn=document.getElementById("noBtn");
-  btn.style.left=Math.random()*120+"px";
-  btn.style.top=Math.random()*120+"px";
-}
+  function openGift(){
+    // audio start (allowed because user clicked)
+    const music=document.getElementById("bgMusic");
+    music.play().catch(()=>{});
 
-function startButterflies(){
-  setInterval(()=>{
-    var b=document.createElement("div");
-    b.className="butterfly";
-    b.innerHTML="❤️";
-    b.style.left=Math.random()*100+"vw";
-    b.style.animationDuration=(3+Math.random()*3)+"s";
-    document.body.appendChild(b);
-    setTimeout(()=>b.remove(),6000);
-  },300);
-}
+    const pop=document.getElementById("popSound");
+    pop.play().catch(()=>{});
+
+    heartBurst();
+
+    // fade hint out smoothly
+    const hint=document.getElementById("surpriseHint");
+    hint.classList.add("hintFade");
+    setTimeout(()=>{ hint.style.display="none"; }, 580);
+
+    // hide box
+    document.getElementById("boxBtn").style.display="none";
+
+    // show gm.gif
+    const gm = document.getElementById("gmGif");
+    gm.style.display="block";
+
+    // show typing bubble
+    const bubble=document.getElementById("typingBubbleWrap");
+    bubble.style.display="flex";
+    bubble.style.opacity="1";
+
+    // after 5 seconds: hide typing, show greeting + open message button
+    setTimeout(()=>{
+      bubble.style.opacity="0";
+      setTimeout(()=>{ bubble.style.display="none"; }, 650);
+
+      const greet=document.getElementById("greetText");
+      greet.classList.add("greetShow");
+      greet.style.opacity = "1";
+      typeText(greet, "Hi Baby…<br>Good Morning ☀️💛", 38);
+
+      const openBtn=document.getElementById("openBtn");
+      openBtn.style.display="inline-block";
+      openBtn.classList.add("btnPop");
+    }, 5000);
+  }
+
+  function enterMessageScreen(){
+    const gift = document.getElementById("giftScreen");
+    gift.classList.add("hideScreen");
+    setTimeout(()=>{
+      gift.style.display="none";
+      document.getElementById("messageScreen").style.display="block";
+    }, 600);
+  }
+
+  function openMessage(){
+    // keep song as-is; just ensure it's playing
+    const music=document.getElementById("bgMusic");
+    music.play().catch(()=>{});
+
+    heartBurst();
+
+    const text=document.getElementById("typingText");
+    text.innerHTML="Prabhakar… will you be my Valentine? 🥺💌";
+    text.style.opacity="1";
+
+    document.getElementById("revealBtn").style.display="none";
+    document.getElementById("valentineBlock").style.display="block";
+  }
+
+  function yes(){
+    if(navigator.vibrate){
+      navigator.vibrate([200,100,200,100,300]);
+    }
+    const msg = document.getElementById("messageScreen");
+    msg.classList.add("hideScreen");
+    setTimeout(()=>{
+      msg.style.display="none";
+      document.getElementById("secondScreen").style.display="block";
+      startButterflies();
+    }, 600);
+  }
+
+  function moveNo(){
+    var btn=document.getElementById("noBtn");
+    btn.style.left=Math.random()*120+"px";
+    btn.style.top=Math.random()*120+"px";
+  }
+
+  function startButterflies(){
+    setInterval(()=>{
+      var b=document.createElement("div");
+      b.className="butterfly";
+      b.innerHTML=(Math.random()>.25) ? "❤️" : "💗";
+      b.style.left=Math.random()*100+"vw";
+      b.style.animationDuration=(3+Math.random()*3)+"s";
+      document.body.appendChild(b);
+      setTimeout(()=>b.remove(),6000);
+    }, 300);
+  }
 </script>
 
 </body>
 </html>
-
