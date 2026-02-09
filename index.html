@@ -73,8 +73,6 @@ position:relative;
 margin-top:15px;
 }
 
-#secondImg{display:none;}
-
 /* butterflies */
 .butterfly{
 position:fixed;
@@ -85,10 +83,11 @@ z-index:1;
 }
 
 @keyframes fall{
-to{
-transform:translateY(110vh);
+to{transform:translateY(110vh);}
 }
-}
+
+/* second screen hidden initially */
+#secondScreen{display:none;}
 </style>
 </head>
 
@@ -96,7 +95,10 @@ transform:translateY(110vh);
 
 <div class="container">
 
-<img id="startImg" src="img1.gif">
+<!-- FIRST SCREEN -->
+<div id="firstScreen">
+
+<img src="img1.gif">
 
 <h2>Hi Baby❤️</h2>
 
@@ -107,9 +109,17 @@ transform:translateY(110vh);
 <button class="no" id="noBtn" onclick="moveNo()">NO 🙈</button>
 </div>
 
-<p id="reply"></p>
+</div>
 
-<img id="secondImg" src="img3.gif">
+<!-- SECOND SCREEN -->
+<div id="secondScreen">
+
+<img src="img3.gif">
+
+<h2>Come meet me soon baby 😘❤️</h2>
+<p>Now it's official… you & me… always ❤️</p>
+
+</div>
 
 </div>
 
@@ -133,13 +143,13 @@ if(navigator.vibrate){
 navigator.vibrate([200,100,200,100,300]);
 }
 
-document.getElementById("reply").innerHTML=
-"Come meet me soon baby 😘❤️";
+// hide first screen
+document.getElementById("firstScreen").style.display="none";
 
-document.getElementById("startImg").style.display="none";
-document.getElementById("secondImg").style.display="block";
+// show second screen
+document.getElementById("secondScreen").style.display="block";
 
-startButterflies(); // ⭐ THIS WAS MISSING
+startButterflies();
 }
 
 function moveNo(){
