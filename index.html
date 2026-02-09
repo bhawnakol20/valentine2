@@ -15,6 +15,7 @@ justify-content:center;
 align-items:center;
 height:100vh;
 text-align:center;
+overflow:hidden;
 }
 
 .container{
@@ -24,6 +25,8 @@ border-radius:18px;
 width:90%;
 max-width:360px;
 box-shadow:0 10px 25px rgba(0,0,0,0.15);
+position:relative;
+z-index:2;
 }
 
 img{
@@ -71,8 +74,21 @@ margin-top:15px;
 }
 
 #secondImg{display:none;}
-#doodle{display:none;margin-top:10px;}
 
+/* butterflies */
+.butterfly{
+position:fixed;
+top:-10px;
+font-size:24px;
+animation:fall linear forwards;
+z-index:1;
+}
+
+@keyframes fall{
+to{
+transform:translateY(110vh);
+}
+}
 </style>
 </head>
 
@@ -94,8 +110,6 @@ margin-top:15px;
 <p id="reply"></p>
 
 <img id="secondImg" src="img3.gif">
-
-
 
 </div>
 
@@ -120,14 +134,12 @@ navigator.vibrate([200,100,200,100,300]);
 }
 
 document.getElementById("reply").innerHTML=
-"Come meet me soon baby ❤️";
+"Come meet me soon baby 😘❤️";
 
 document.getElementById("startImg").style.display="none";
 document.getElementById("secondImg").style.display="block";
 
-setTimeout(()=>{
-document.getElementById("doodle").style.display="block";
-},2500);
+startButterflies(); // ⭐ THIS WAS MISSING
 }
 
 function moveNo(){
@@ -136,12 +148,11 @@ btn.style.left=Math.random()*120+"px";
 btn.style.top=Math.random()*120+"px";
 }
 
-// butterflies
 function startButterflies(){
 setInterval(function(){
 var b=document.createElement("div");
 b.className="butterfly";
-b.innerHTML="🦋";
+b.innerHTML="❤️";
 b.style.left=Math.random()*100+"vw";
 b.style.animationDuration=(3+Math.random()*3)+"s";
 document.body.appendChild(b);
@@ -153,5 +164,3 @@ setTimeout(()=>b.remove(),6000);
 
 </body>
 </html>
-
-
